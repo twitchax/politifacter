@@ -182,6 +182,232 @@ Lying score: 25.40%
    Pants On Fire : [=] 1.6 ± 4.9% (10)
 ```
 
+Finally, you can also get the statistics objec that is aggregated on the server:
+```bash
+curl http://politifacter.ajroney.com/api/analyze/party.party=Democrat,total_count%3E=50/statistics | python -m json.tool
+```
+yields
+```
+{
+    "falseArray": [
+        71,
+        27,
+        9,
+        10,
+        3
+    ],
+    "halfTrueArray": [
+        159,
+        58,
+        20,
+        21,
+        15
+    ],
+    "mostlyFalseArray": [
+        69,
+        39,
+        15,
+        11,
+        7
+    ],
+    "mostlyTrueArray": [
+        163,
+        73,
+        19,
+        16,
+        14
+    ],
+    "name": "",
+    "pantsOnFireArray": [
+        9,
+        6,
+        2,
+        4,
+        0
+    ],
+    "people": [
+        {
+            "barely_true_count": 69,
+            "current_job": "President",
+            "false_count": 71,
+            "first_name": "Barack",
+            "half_true_count": 159,
+            "home_state": "Illinois",
+            "id": 4,
+            "last_name": "Obama",
+            "mostly_true_count": 163,
+            "name_slug": "barack-obama",
+            "pants_count": 9,
+            "party": {
+                "id": 1,
+                "party": "Democrat",
+                "party_slug": "democrat",
+                "resource_uri": "/api/v/2/party/1/"
+            },
+            "photo": "http://static.politifact.com.s3.amazonaws.com/politifact/mugs/NYT_OBAMA_1.jpg",
+            "primary_edition": {
+                "edition": "National",
+                "edition_slug": "truth-o-meter",
+                "id": 1,
+                "meter_name": "The Truth-O-Meter<sup>TM</sup>",
+                "resource_uri": "/api/v/2/edition/1/"
+            },
+            "promise_meter_cutout": null,
+            "resource_uri": "/api/v/2/person/4/",
+            "total_count": 625,
+            "true_count": 122,
+            "website": "http://www.whitehouse.gov/"
+        },
+        {
+            "barely_true_count": 39,
+            "current_job": "Presidential candidate",
+            "false_count": 27,
+            "first_name": "Hillary",
+            "half_true_count": 58,
+            "home_state": "New York",
+            "id": 1,
+            "last_name": "Clinton",
+            "mostly_true_count": 73,
+            "name_slug": "hillary-clinton",
+            "pants_count": 6,
+            "party": {
+                "id": 1,
+                "party": "Democrat",
+                "party_slug": "democrat",
+                "resource_uri": "/api/v/2/party/1/"
+            },
+            "photo": "http://static.politifact.com.s3.amazonaws.com/politifact/mugs/GYI_659046701_585968470.jpg",
+            "primary_edition": {
+                "edition": "National",
+                "edition_slug": "truth-o-meter",
+                "id": 1,
+                "meter_name": "The Truth-O-Meter<sup>TM</sup>",
+                "resource_uri": "/api/v/2/edition/1/"
+            },
+            "promise_meter_cutout": null,
+            "resource_uri": "/api/v/2/person/1/",
+            "total_count": 270,
+            "true_count": 60,
+            "website": "http://www.hillaryclinton.com/"
+        },
+        {
+            "barely_true_count": 15,
+            "current_job": "",
+            "false_count": 9,
+            "first_name": "Charlie",
+            "half_true_count": 20,
+            "home_state": "Florida",
+            "id": 257,
+            "last_name": "Crist",
+            "mostly_true_count": 19,
+            "name_slug": "charlie-crist",
+            "pants_count": 2,
+            "party": {
+                "id": 1,
+                "party": "Democrat",
+                "party_slug": "democrat",
+                "resource_uri": "/api/v/2/party/1/"
+            },
+            "photo": "http://static.politifact.com.s3.amazonaws.com/politifact/mugs/crist.JPG",
+            "primary_edition": {
+                "edition": "Florida",
+                "edition_slug": "florida",
+                "id": 4,
+                "meter_name": "The Florida Truth-O-Meter",
+                "resource_uri": "/api/v/2/edition/4/"
+            },
+            "promise_meter_cutout": null,
+            "resource_uri": "/api/v/2/person/257/",
+            "total_count": 90,
+            "true_count": 15,
+            "website": ""
+        },
+        {
+            "barely_true_count": 11,
+            "current_job": "U.S. senator",
+            "false_count": 10,
+            "first_name": "Joe",
+            "half_true_count": 21,
+            "home_state": "Delaware",
+            "id": 11,
+            "last_name": "Biden",
+            "mostly_true_count": 16,
+            "name_slug": "joe-biden",
+            "pants_count": 4,
+            "party": {
+                "id": 1,
+                "party": "Democrat",
+                "party_slug": "democrat",
+                "resource_uri": "/api/v/2/party/1/"
+            },
+            "photo": "http://static.politifact.com.s3.amazonaws.com/mugs/mug-joebiden.jpg",
+            "primary_edition": {
+                "edition": "National",
+                "edition_slug": "truth-o-meter",
+                "id": 1,
+                "meter_name": "The Truth-O-Meter<sup>TM</sup>",
+                "resource_uri": "/api/v/2/edition/1/"
+            },
+            "promise_meter_cutout": null,
+            "resource_uri": "/api/v/2/person/11/",
+            "total_count": 78,
+            "true_count": 13,
+            "website": "http://www.joebiden.com/"
+        },
+        {
+            "barely_true_count": 7,
+            "current_job": "U.S. Senator",
+            "false_count": 3,
+            "first_name": "Tim",
+            "half_true_count": 15,
+            "home_state": "Virginia",
+            "id": 424,
+            "last_name": "Kaine",
+            "mostly_true_count": 14,
+            "name_slug": "tim-kaine",
+            "pants_count": 0,
+            "party": {
+                "id": 1,
+                "party": "Democrat",
+                "party_slug": "democrat",
+                "resource_uri": "/api/v/2/party/1/"
+            },
+            "photo": "http://static.politifact.com.s3.amazonaws.com/politifact/mugs/AP_NCCB111_CAMPAIGN_2016_KA.JPG",
+            "primary_edition": {
+                "edition": "Virginia",
+                "edition_slug": "virginia",
+                "id": 10,
+                "meter_name": "The Virginia Truth-O-Meter",
+                "resource_uri": "/api/v/2/edition/10/"
+            },
+            "promise_meter_cutout": null,
+            "resource_uri": "/api/v/2/person/424/",
+            "total_count": 52,
+            "true_count": 9,
+            "website": "http://www.kaine.senate.gov/"
+        }
+    ],
+    "selectors": [
+        "party.party=Democrat",
+        "total_count>=50"
+    ],
+    "totalArray": [
+        593,
+        263,
+        80,
+        75,
+        48
+    ],
+    "trueArray": [
+        122,
+        60,
+        15,
+        13,
+        9
+    ]
+}
+```
+
 ## License
 
 ```
