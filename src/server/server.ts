@@ -3,7 +3,6 @@ import * as express from 'express';
 import * as Commands from '../shared/commands';
 
 var app = express();
-var virtualDirPath = process.env.virtualDirPath || '';
 var port = process.env.PORT || 3000;
 var fileName = 'people.json';
 var updateInterval = 60 * 60 * 1000;
@@ -18,23 +17,23 @@ app.use(function(req, res, next) {
 
 // Routes.
 
-app.get(`${virtualDirPath}/`, (req, res) => {
+app.get('/', (req, res) => {
     res.send('YAY');
 });
 
-app.get(`${virtualDirPath}/api/analyze/:selectors/statistics`, (req, res) => {
+app.get('/api/analyze/:selectors/statistics', (req, res) => {
     Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
         res.send(stats);
     });
 });
 
-app.get(`${virtualDirPath}/api/analyze/:selectors/text`, (req, res) => {
+app.get('/api/analyze/:selectors/text', (req, res) => {
     Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
         res.send(stats.toString());
     });
 });
 
-app.get(`${virtualDirPath}/api/analyze/:selectors/prettytext`, (req, res) => {
+app.get('/api/analyze/:selectors/prettytext', (req, res) => {
     Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
         res.send(stats.toPrettyString());
     });
