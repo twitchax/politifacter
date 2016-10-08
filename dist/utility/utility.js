@@ -23,6 +23,23 @@ program
         Commands.analyze(fileName, selectors).catch(console.error);
     }
 });
+// Example commands.
+program
+    .command('example')
+    .description('gets and example Person object.')
+    .action(() => {
+    var fileName = 'people.json';
+    if (!fs.existsSync(fileName)) {
+        console.log();
+        console.log('Obtaining data...');
+        Commands.downloadAndSavePeople(fileName).then(() => {
+            Commands.example(fileName).catch(console.error);
+        });
+    }
+    else {
+        Commands.example(fileName).catch(console.error);
+    }
+});
 // Clean commands.
 program
     .command('clean [fileName]')

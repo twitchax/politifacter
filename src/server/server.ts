@@ -48,12 +48,19 @@ app.get('/api/analyze/:selectors/prettytext', (req, res) => {
     });
 });
 
-app.get('/api/example', (req, res) => {
-    fs.readFile('people.json', (err, d) => {
-        if(err)
-            res.send(500, err);
+app.get('/api/analyze/:selectors/htmltext', (req, res) => {
+    Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
+        res.send(stats.toString('<br />'));
+    }).catch(err => {
+        res.send(500, err);
+    });
+});
 
-        res.send(JSON.parse(d.toString())[0]);
+app.get('/api/example', (req, res) => {
+    Commands.example(fileName).then((person) => {
+        res.send(person);
+    }).catch(err => {
+        res.send(500, err);
     });
 });
 

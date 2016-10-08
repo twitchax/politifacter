@@ -30,6 +30,19 @@ function analyze(source, selectors) {
     });
 }
 exports.analyze = analyze;
+// Example commands.
+function example(source) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(source, (err, d) => {
+            if (err)
+                reject(err);
+            var person = JSON.parse(d.toString())[0];
+            console.log(JSON.stringify(person, null, 4));
+            resolve(person);
+        });
+    });
+}
+exports.example = example;
 // Get commands.
 var batchSize = 100;
 var batchMax = 5000;

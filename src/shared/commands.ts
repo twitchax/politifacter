@@ -37,6 +37,22 @@ export function analyze(source: string, selectors: string[]) : Promise<Statistic
     });
 }
 
+// Example commands.
+
+export function example(source: string) : Promise<Person> {
+    return new Promise((resolve: (stats: Person) => void, reject: (err: Error) => void) => {
+        fs.readFile(source, (err, d) => {
+            if(err)
+                reject(err);
+
+            var person = JSON.parse(d.toString())[0] as Person;
+
+            console.log(JSON.stringify(person, null, 4));
+            resolve(person);
+        });
+    });
+}
+
 // Get commands.
 
 var batchSize = 100;
