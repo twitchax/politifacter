@@ -1,0 +1,10 @@
+{
+  "globalDependencies": {
+    "async": "registry:dt/async#2.0.1+20160804113311",
+    "chai": "registry:dt/chai#3.4.0+20160601211834",
+    "commander": "registry:dt/commander#2.3.0+20160317120654",
+    "fast-stats": "registry:dt/fast-stats#0.0.0+20160316155526",
+    "lodash": "registry:dt/lodash#4.14.0+20161004174455",
+    "progress": "registry:dt/progress#1.1.8+20160906145338"
+  }
+}

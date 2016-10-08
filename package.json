@@ -1,0 +1,33 @@
+{
+  "name": "politifacter",
+  "version": "1.0.0",
+  "description": "A politifact aggregator.",
+  "main": "dist/pf.js",
+  "dependencies": {
+    "async": "^2.0.1",
+    "commander": "^2.9.0",
+    "fast-stats": "0.0.3",
+    "fs": "0.0.1-security",
+    "lodash": "^4.16.3",
+    "progress": "^1.1.8",
+    "request": "^2.74.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.0",
+    "tsc": "^1.20150623.0",
+    "typescript": "^2.0.3",
+    "typings": "^1.4.0"
+  },
+  "scripts": {
+    "build": "tsc *.ts",
+    "typings": "typings install",
+    "test": "mocha dist/test/test.js",
+    "start": "node dist/server/server.js"
+  },
+  "bin": {
+    "pf": "./dist/utility/pf.js"
+  },
+  "author": "Aaron Roney",
+  "license": "MIT"
+}
