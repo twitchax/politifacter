@@ -3,6 +3,7 @@ import * as express from 'express';
 import * as Commands from '../shared/commands';
 
 var app = express();
+var port = process.env.PORT || 3000;
 var fileName = 'people.json';
 var updateInterval = 60 * 60 * 1000;
 
@@ -15,6 +16,10 @@ app.use(function(req, res, next) {
 });
 
 // Routes.
+
+app.get('/', (req, res) => {
+    res.send('YAY');
+});
 
 app.get('/api/analyze/:selectors/statistics', (req, res) => {
     Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
@@ -43,7 +48,7 @@ setInterval(() => {
 // Download people and start server.
 
 Commands.downloadAndSavePeople(fileName).then(() => {
-    app.listen(80, () => {
-        console.log('Listening on port 80!');
+    app.listen(port, () => {
+        console.log(`Listening on port ${port}!`);
     });
 });

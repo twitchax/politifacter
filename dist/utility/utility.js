@@ -5,7 +5,7 @@ const fs = require('fs');
 const Commands = require('../shared/commands');
 // Global defines.
 program
-    .version('1.4.0');
+    .version('1.3.1');
 // Analyze commands.
 program
     .command('analyze [selectors...]')
