@@ -7,6 +7,8 @@ var port = process.env.PORT || 3000;
 var fileName = 'people.json';
 var updateInterval = 60 * 60 * 1000;
 
+console.log(`Environment port: ${port}.`);
+
 // Global settings.
 
 app.use(function(req, res, next) {
