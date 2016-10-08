@@ -1,5 +1,6 @@
 "use strict";
 const express = require('express');
+const fs = require('fs');
 const Commands = require('../shared/commands');
 var app = express();
 var port = process.env.PORT || 3000;
@@ -29,6 +30,15 @@ app.get('/api/analyze/:selectors/text', (req, res) => {
 app.get('/api/analyze/:selectors/prettytext', (req, res) => {
     Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
         res.send(stats.toPrettyString());
+    });
+});
+app.get('/api/example', (req, res) => {
+    Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
+        fs.readFile('people.json', (err, d) => {
+            if (err)
+                res.send(500, err);
+            res.send(JSON.parse(d.toString())[0]);
+        });
     });
 });
 // Get new people every hour.
