@@ -32,7 +32,7 @@
     "build": "node_modules/.bin/tsc",
     "typings": "node_modules/.bin/typings install",
     "test": "node_modules/.bin/mocha dist/test/test.js -R spec --grep p0",
-    "start": "sudo node dist/server/server.js"
+    "start": "node dist/server/server.js"
   },
   "bin": {
     "pf": "./dist/utility/utility.js"
