@@ -30,7 +30,7 @@ export function analyze(source: string, selectors: string[]) : Promise<Statistic
                 
                 var selectedStatistics = _(selected).reduce(helpers.aggregateStatsForPeople, new Statistics('', selectors));
                 
-                helpers.printStatistics(selectedStatistics);
+                console.log(selectedStatistics.toPrettyString());
                 resolve(selectedStatistics);
             }, reject);
         });

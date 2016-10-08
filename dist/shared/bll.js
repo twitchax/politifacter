@@ -1,5 +1,7 @@
 "use strict";
 const _ = require('lodash');
+const colors = require('colors');
+colors /* peg this for compile */;
 const fast_stats_1 = require('fast-stats');
 const helpers = require('./helpers');
 class Statistics {
@@ -56,6 +58,30 @@ class Statistics {
     get moePercentHalfTrue() { return this.getMoePercent(this.halfTrueArray); }
     get moePercentMostlyTrue() { return this.getMoePercent(this.mostlyTrueArray); }
     get moePercentTrue() { return this.getMoePercent(this.trueArray); }
+    // String helpers.
+    toPrettyString() {
+        var percentString = '=';
+        var output = [];
+        output.push('\n');
+        output.push(`Selectors: [ ${this.selectors.join(', ')} ]\n`.bold.underline.bgBlue.green);
+        output.push('\n');
+        output.push(`Number of people in selection: ${this.numPeople} ${this.numPeople < 20 ? ('[ ' + _(this.people).map(p => p.name_slug).value().join(', ') + ' ]').yellow : ''}\n`);
+        output.push(`Number of statements in selection: ${this.numTotal}\n`);
+        output.push(`Honesty score: ${(this.percentTrue + this.percentMostlyTrue).toFixed(2).toString().green}%\n`);
+        output.push(`Lying score: ${(this.percentPantsOnFire + this.percentFalse + this.percentMostlyFalse).toFixed(2).toString().red}%\n`);
+        output.push('\n');
+        output.push(`            True : [${_.repeat(percentString, this.percentTrue).green}] ${this.percentTrue} ± ${this.moePercentTrue}% (${this.numTrue})\n`);
+        output.push(`     Mostly True : [${_.repeat(percentString, this.percentMostlyTrue).blue}] ${this.percentMostlyTrue} ± ${this.moePercentMostlyTrue}% (${this.numMostlyTrue})\n`);
+        output.push(`       Half True : [${_.repeat(percentString, this.percentHalfTrue).grey}] ${this.percentHalfTrue} ± ${this.moePercentHalfTrue}% (${this.numHalfTrue})\n`);
+        output.push(`    Mostly False : [${_.repeat(percentString, this.percentMostlyFalse).yellow}] ${this.percentMostlyFalse} ± ${this.moePercentMostlyFalse}% (${this.numMostlyFalse})\n`);
+        output.push(`           False : [${_.repeat(percentString, this.percentFalse).magenta}] ${this.percentFalse} ± ${this.moePercentFalse}% (${this.numFalse})\n`);
+        output.push(`   Pants On Fire : [${_.repeat(percentString, this.percentPantsOnFire).red}] ${this.percentPantsOnFire} ± ${this.moePercentPantsOnFire}% (${this.numPantsOnFire})\n`);
+        output.push('\n');
+        return output.join('');
+    }
+    toString() {
+        return colors.strip(this.toPrettyString());
+    }
 }
 exports.Statistics = Statistics;
 //# sourceMappingURL=bll.js.map

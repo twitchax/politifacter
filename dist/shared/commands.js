@@ -23,7 +23,7 @@ function analyze(source, selectors) {
                     throw 'No people matched the criteria.';
                 }
                 var selectedStatistics = _(selected).reduce(helpers.aggregateStatsForPeople, new bll_1.Statistics('', selectors));
-                helpers.printStatistics(selectedStatistics);
+                console.log(selectedStatistics.toPrettyString());
                 resolve(selectedStatistics);
             }, reject);
         });
