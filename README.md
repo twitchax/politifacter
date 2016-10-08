@@ -4,7 +4,7 @@ A utility for aggregating politifact statements.
 
 ## Information
 
-**politifacter** is a small command line (and, one day, server) utility written in node.js that allows the user to aggregate politifact scorecards based on ["politifact's"](http://www.politifact.com/) ["API"](http://static.politifact.com/api/v2apidoc.html) (["example person"](example/examplePerson.json)).
+**politifacter** is a small command line (and, one day, server) utility written in node.js that allows the user to aggregate politifact scorecards based on [politifact's](http://www.politifact.com/) [API](http://static.politifact.com/api/v2apidoc.html) ([example person](example/examplePerson.json)).
 
 ### Build and Install
 
