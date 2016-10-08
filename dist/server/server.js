@@ -33,12 +33,10 @@ app.get('/api/analyze/:selectors/prettytext', (req, res) => {
     });
 });
 app.get('/api/example', (req, res) => {
-    Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
-        fs.readFile('people.json', (err, d) => {
-            if (err)
-                res.send(500, err);
-            res.send(JSON.parse(d.toString())[0]);
-        });
+    fs.readFile('people.json', (err, d) => {
+        if (err)
+            res.send(500, err);
+        res.send(JSON.parse(d.toString())[0]);
     });
 });
 // Get new people every hour.
