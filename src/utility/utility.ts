@@ -20,21 +20,21 @@ program
         if(!fs.existsSync(fileName)) {
             console.log();
             console.log('Obtaining data...');
-            Commands.downloadAndSavePeople(fileName, () => {
-                Commands.analyze(fileName, selectors);
+            Commands.downloadAndSavePeople(fileName).then(() => {
+                Commands.analyze(fileName, selectors).catch(console.error);
             });
         } else {
-            Commands.analyze(fileName, selectors);
+            Commands.analyze(fileName, selectors).catch(console.error);
         }
     });
 
 // Clean commands.
 
 program
-    .command('clean')
-    .description('deletes all JSON files in path.')
-    .action((source, selectors) => {
-        // delete all JSON files.
+    .command('clean [fileName]')
+    .description('deletes file at path <fileName>.')
+    .action((fileName) => {
+        fs.unlinkSync(fileName);
     });
 
 // Get commands.
@@ -44,9 +44,9 @@ program
     .description('gets <type> (statements/people) as JSON and save to <dest> (file path).')
     .action((type, dest) => {
         if(type === 'people') {
-            Commands.downloadAndSavePeople(dest);
+            Commands.downloadAndSavePeople(dest).catch(console.error);
         } else if (type === 'statements') {
-            Commands.downloadAndSaveStatements(dest);
+            Commands.downloadAndSaveStatements(dest).catch(console.error);
         } else {
             throw 'Unknown type.';
         }

@@ -21,9 +21,6 @@ npm install -g
 
 ### Testing
 
-None.
-
-One day there will be a:
 ```bash
 npm test
 ```
@@ -96,6 +93,27 @@ Lying score: 49.09%
     Mostly False : [==================] 18.98 ± 2.02% (1028)
            False : [=====================] 21.97 ± 2.22% (1190)
    Pants On Fire : [========] 8.14 ± 1.52% (441)
+```
+
+Range selectors are also allowed:
+```bash
+pf analyze party.party=Democrat "total_count>=50"
+```
+yields
+```
+Selectors: party.party=Democrat,total_count>=50
+
+Number of people in selection: 5
+Number of statements in selection: 1059
+Honesty score: 47.59%
+Lying score: 26.62%
+
+            True : [====================] 20.68 ± 1.66% (219)
+     Mostly True : [==========================] 26.91 ± 2.54% (285)
+       Half True : [=========================] 25.78 ± 2.68% (273)
+    Mostly False : [=============] 13.31 ± 1.98% (141)
+           False : [===========] 11.33 ± 2.1% (120)
+   Pants On Fire : [=] 1.98 ± 1.53% (21)
 ```
 
 ## License
