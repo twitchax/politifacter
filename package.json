@@ -1,6 +1,6 @@
 {
   "name": "politifacter",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A politifact aggregator.",
   "main": "dist/shared/commands.js",
   "dependencies": {
