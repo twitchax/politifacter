@@ -68,7 +68,7 @@ describe('p1', function () {
         fs.unlinkSync(fileName);
     });
     describe('#downloadAndSavePeople()', function () {
-        it('check that we can download people from service', function () {
+        it('check that we can download statements from service', function () {
             chai_1.expect(fs.existsSync(fileName)).to.be.true;
         });
     });

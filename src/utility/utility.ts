@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#! /usr/bin/env node
 
 import * as program from 'commander';
 import * as fs from 'fs';
@@ -6,8 +6,10 @@ import * as path from 'path';
 
 import * as Commands from '../shared/commands';
 
+// Global defines.
+
 program
-    .version('1.0.0');
+    .version('1.3.1');
 
 // Analyze commands.
 
@@ -51,5 +53,7 @@ program
             throw 'Unknown type.';
         }
     });
+
+// Global directives.
 
 program.parse(process.argv);

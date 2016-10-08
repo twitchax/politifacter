@@ -1,10 +1,11 @@
-#!/usr/bin/env node
+#! /usr/bin/env node
 "use strict";
 const program = require('commander');
 const fs = require('fs');
 const Commands = require('../shared/commands');
+// Global defines.
 program
-    .version('1.0.0');
+    .version('1.2.0');
 // Analyze commands.
 program
     .command('analyze [selectors...]')
@@ -44,5 +45,6 @@ program
         throw 'Unknown type.';
     }
 });
+// Global directives.
 program.parse(process.argv);
 //# sourceMappingURL=utility.js.map
