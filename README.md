@@ -27,18 +27,20 @@ npm test
 
 ### Compatibility
 
-Node v6.0.0+.
+Node v6.7.0+.
 
 ### Examples
+
+#### Local
 A basic example follows:
 ```bash
 pf analyze last_name=Obama first_name=Barack
 ```
 yields
 ```
-Selectors: last_name=Obama,first_name=Barack
+Selectors: [ name_slug=barack-obama ]
 
-Number of people in selection: 1
+Number of people in selection: 1 [ barack-obama ]
 Number of statements in selection: 593
 Honesty score: 48.06%
 Lying score: 25.13%
@@ -101,9 +103,9 @@ pf analyze party.party=Democrat "total_count>=50"
 ```
 yields
 ```
-Selectors: party.party=Democrat,total_count>=50
+Selectors: [ party.party=Democrat, total_count>=50 ]
 
-Number of people in selection: 5
+Number of people in selection: 5 [ barack-obama, hillary-clinton, charlie-crist, joe-biden, tim-kaine ]
 Number of statements in selection: 1059
 Honesty score: 47.59%
 Lying score: 26.62%
@@ -114,6 +116,70 @@ Lying score: 26.62%
     Mostly False : [=============] 13.31 ± 1.98% (141)
            False : [===========] 11.33 ± 2.1% (120)
    Pants On Fire : [=] 1.98 ± 1.53% (21)
+```
+
+#### Web service
+There is a small web server included in this package that is propped up.  Here are some example calls.
+
+If you need to know what "selectors" are available, you can call the example API:
+```bash
+curl http://politifacter.ajroney.com/api/example | python -m json.tool
+```
+yields
+```
+{
+    "barely_true_count": 69,
+    "current_job": "President",
+    "false_count": 71,
+    "first_name": "Barack",
+    "half_true_count": 159,
+    "home_state": "Illinois",
+    "id": 4,
+    "last_name": "Obama",
+    "mostly_true_count": 163,
+    "name_slug": "barack-obama",
+    "pants_count": 9,
+    "party": {
+        "id": 1,
+        "party": "Democrat",
+        "party_slug": "democrat",
+        "resource_uri": "/api/v/2/party/1/"
+    },
+    "photo": "http://static.politifact.com.s3.amazonaws.com/politifact/mugs/NYT_OBAMA_1.jpg",
+    "primary_edition": {
+        "edition": "National",
+        "edition_slug": "truth-o-meter",
+        "id": 1,
+        "meter_name": "The Truth-O-Meter<sup>TM</sup>",
+        "resource_uri": "/api/v/2/edition/1/"
+    },
+    "promise_meter_cutout": null,
+    "resource_uri": "/api/v/2/person/4/",
+    "total_count": 625,
+    "true_count": 122,
+    "website": "http://www.whitehouse.gov/"
+}
+```
+
+Then, you can make an analyze call:
+```bash
+curl http://politifacter.ajroney.com/api/analyze/home_state=Illinois,party.party=Democrat,total_count%3E=5/text
+```
+yields
+```
+Selectors: [ home_state=Illinois, party.party=Democrat, total_count>=5 ]
+
+Number of people in selection: 6 [ barack-obama, michelle-obama, rahm-emanuel, richard-durbin, arne-duncan, luis-gutierrez ]
+Number of statements in selection: 626
+Honesty score: 48.25%
+Lying score: 25.40%
+
+            True : [====================] 20.45 ± 10.47% (128)
+     Mostly True : [===========================] 27.8 ± 14.22% (174)
+       Half True : [==========================] 26.36 ± 7.81% (165)
+    Mostly False : [===========] 11.34 ± 6.15% (71)
+           False : [============] 12.46 ± 9.4% (78)
+   Pants On Fire : [=] 1.6 ± 4.9% (10)
 ```
 
 ## License

@@ -154,8 +154,8 @@ function filter(array: Person[], selector: string) : Person[] {
         throw Error('Operator not found.');
     }
 
-    var path = selectSplit[0];
-    var value = selectSplit[1];
+    var path = selectSplit[0].trim();
+    var value = selectSplit[1].trim();
 
     switch(mode) {
         case 'greaterEqual':

@@ -20,16 +20,22 @@ app.get('/', (req, res) => {
 app.get('/api/analyze/:selectors/statistics', (req, res) => {
     Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
         res.send(stats);
+    }).catch(err => {
+        res.send(500, err);
     });
 });
 app.get('/api/analyze/:selectors/text', (req, res) => {
     Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
         res.send(stats.toString());
+    }).catch(err => {
+        res.send(500, err);
     });
 });
 app.get('/api/analyze/:selectors/prettytext', (req, res) => {
     Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
         res.send(stats.toPrettyString());
+    }).catch(err => {
+        res.send(500, err);
     });
 });
 app.get('/api/example', (req, res) => {
