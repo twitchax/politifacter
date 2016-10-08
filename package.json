@@ -2,7 +2,7 @@
   "name": "politifacter",
   "version": "1.0.0",
   "description": "A politifact aggregator.",
-  "main": "dist/pf.js",
+  "main": "dist/utility/commands.js",
   "dependencies": {
     "async": "^2.0.1",
     "commander": "^2.9.0",
@@ -20,13 +20,13 @@
     "typings": "^1.4.0"
   },
   "scripts": {
-    "build": "tsc *.ts",
-    "typings": "typings install",
-    "test": "mocha dist/test/test.js",
+    "build": "node_modules/.bin/tsc",
+    "typings": "node_modules/.bin/typings install",
+    "test": "node_modules/.bin/mocha dist/test/test.js",
     "start": "node dist/server/server.js"
   },
   "bin": {
-    "pf": "./dist/utility/pf.js"
+    "pf": "./dist/utility/utility.js"
   },
   "author": "Aaron Roney",
   "license": "MIT"

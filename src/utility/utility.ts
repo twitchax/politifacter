@@ -4,7 +4,7 @@ import * as program from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import * as Commands from './commands';
+import * as Commands from '../shared/commands';
 
 program
     .version('1.0.0');
