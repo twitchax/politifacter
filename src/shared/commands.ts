@@ -5,33 +5,78 @@ import * as async from 'async';
 import * as ProgressBar from 'progress';
 
 import * as helpers from '../shared/helpers';
-import { Statistics, Person, Statement } from '../shared/bll';
+import { Statistics, Person, Statement, Selection } from '../shared/bll';
 
 // Analyze commands.
 
-export function analyze(source: string, selectors: string[]) : Promise<Statistics> {
+export function analyze(source: string, selectionString: string /* comma-separated list */) : Promise<Statistics> {
     return new Promise((resolve: (stats: Statistics) => void, reject: (err: Error) => void) => {
         fs.readFile(source, (err, d) => {
             if (err) {
                 reject(err);
             }
 
-            tryOrReject(() => {
+            helpers.tryOrReject(() => {
                 var data = JSON.parse(d.toString());
+                var selection = helpers.parseSelection(selectionString);
+                var selectors = selection.groups[0] /* should only have one group */;
             
                 var selected: Person[] = data;
                 _(selectors).forEach(selector => {
-                    selected = filter(selected, selector);
+                    selected = helpers.filter(selected, selector);
                 });
 
                 if(selected.length === 0) {
-                    throw 'No people matched the criteria.';
+                    return;
                 }
                 
                 var selectedStatistics = _(selected).reduce(helpers.aggregateStatsForPeople, new Statistics('', selectors));
                 
                 console.log(selectedStatistics.toPrettyString());
                 resolve(selectedStatistics);
+            }, reject);
+        });
+    });
+}
+
+// Compare commands.
+
+export function compare(source: string, selectionString: string /* semicolon-separated list of comma-separated lists */) : Promise<Statistics[]> {
+    return new Promise((resolve: (stats: Statistics[]) => void, reject: (err: Error) => void) => {
+        fs.readFile(source, (err, d) => {
+            if (err) {
+                reject(err);
+            }
+
+            helpers.tryOrReject(() => {
+                var data = JSON.parse(d.toString());
+                var selection = helpers.parseSelection(selectionString);
+
+                var statistics = [] as Statistics[];
+
+                _(selection.groups).forEach(group => {
+                    var selected: Person[] = data;
+                    var selectors = group.concat(selection.global);
+
+                    _(selectors).forEach(selector => {
+                        selected = helpers.filter(selected, selector);
+                    });
+
+                    if(selected.length === 0) {
+                        return;
+                    }
+                    
+                    var selectedStatistics = _(selected).reduce(helpers.aggregateStatsForPeople, new Statistics('', selectors));
+
+                    statistics.push(selectedStatistics);
+                });
+            
+                statistics = _(statistics).orderBy(s => s.percentPantsOnFire + s.percentFalse + s.percentMostlyFalse).value();
+
+                console.log(statistics.length);
+                
+                console.log(helpers.getStatisticsCompareString(statistics))
+                resolve(statistics);
             }, reject);
         });
     });
@@ -132,69 +177,4 @@ export function downloadAndSaveStatements(filename: string) : Promise<Statement[
             });
         });
     });
-}
-
-// Command helpers.
-
-function tryOrReject(func: () => void, reject: (err: Error) => void) {
-    try {
-        func();
-    } catch(e) {
-        reject(e);
-    }
-} 
-
-function filter(array: Person[], selector: string) : Person[] {
-    if(selector.includes('>=')) {
-        var selectSplit = selector.split('>=');
-        var mode = 'greaterEqual';
-    } else if (selector.includes('<=')) {
-        var selectSplit = selector.split('<=');
-        var mode = 'lessEqual';
-    } else if (selector.includes('!=')) {
-        var selectSplit = selector.split('!=');
-        var mode = 'notEqual';
-    } else if (selector.includes('<>')) {
-        var selectSplit = selector.split('<>');
-        var mode = 'notEqual';
-    } else if (selector.includes('>')) {
-        var selectSplit = selector.split('>');
-        var mode = 'greater';
-    } else if (selector.includes('<')) {
-        var selectSplit = selector.split('<');
-        var mode = 'less';
-    } else if (selector.includes('=')) {
-        var selectSplit = selector.split('=');
-        var mode = 'equal';
-    } else {
-        throw Error('Operator not found.');
-    }
-
-    var path = selectSplit[0].trim();
-    var value = selectSplit[1].trim();
-
-    switch(mode) {
-        case 'greaterEqual':
-            var filter = d => _.get(d, path) >= parseFloat(value);
-            break;
-        case 'lessEqual':
-            var filter = d => _.get(d, path) <= parseFloat(value);
-            break;
-        case 'notEqual':
-            var filter = d => _.get(d, path) != value;
-            break;
-        case 'greater':
-            var filter = d => _.get(d, path) > parseFloat(value);
-            break;
-        case 'less':
-            var filter = d => _.get(d, path) < parseFloat(value);
-            break;
-        case 'equal':
-            var filter = d => _.get(d, path) == value;
-            break;
-        default:
-            throw Error('Invalid operator.');
-    }
-
-    return _(array).filter(filter).value();
 }

@@ -5,22 +5,37 @@ const fs = require('fs');
 const Commands = require('../shared/commands');
 // Global defines.
 program
-    .version('1.3.1');
+    .version('3.0.0');
 // Analyze commands.
 program
-    .command('analyze [selectors...]')
-    .description('analyzes stored JSON people file (or downloads) and selects the data by [selectors] (optional selectors, e.g., "name_slug=barack-obama").')
-    .action((selectors) => {
+    .command('analyze [selectors]')
+    .description('analyzes stored JSON people file (or downloads) and selects the data by [selectors] (optional selectors, e.g., "party.party=Democrat,total_count>=20).')
+    .action((selector) => {
     var fileName = 'people.json';
     if (!fs.existsSync(fileName)) {
         console.log();
         console.log('Obtaining data...');
         Commands.downloadAndSavePeople(fileName).then(() => {
-            Commands.analyze(fileName, selectors).catch(console.error);
+            Commands.analyze(fileName, selector).catch(console.error);
         });
     }
     else {
-        Commands.analyze(fileName, selectors).catch(console.error);
+        Commands.analyze(fileName, selector).catch(console.error);
+    }
+});
+// Compare commands.
+program
+    .command('compare [groups]')
+    .description('compares groups selected by [selectors] (optional selectors, e.g., "name_slug=barack-obama").')
+    .action((groups) => {
+    var fileName = 'people.json';
+    if (!fs.existsSync(fileName)) {
+        console.log();
+        console.log('Obtaining data...');
+        Commands.compare(fileName, groups).catch(console.error);
+    }
+    else {
+        Commands.compare(fileName, groups).catch(console.error);
     }
 });
 // Example commands.

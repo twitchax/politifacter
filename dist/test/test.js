@@ -28,7 +28,7 @@ describe('p0', function () {
     });
     describe('#analyze()', function () {
         it('check that we can analyze', function (done) {
-            Commands.analyze(fileName, ['first_name=Barack', 'last_name=Obama']).then((stats) => {
+            Commands.analyze(fileName, 'first_name=Barack, last_name=Obama').then((stats) => {
                 chai_1.expect(stats).to.not.be.undefined;
                 chai_1.expect(stats).to.not.be.null;
                 chai_1.expect(stats.people).to.not.be.empty;
@@ -37,14 +37,14 @@ describe('p0', function () {
             }).catch(done);
         });
         it('check that analyze can fail', function (done) {
-            Commands.analyze(fileName, ['first_nameBarack']).then(() => {
+            Commands.analyze(fileName, 'first_nameBarack').then(() => {
                 done(Error('Completed successfully'));
             }).catch(() => {
                 done();
             });
         });
         it('check that analyze can do advanced selection', function (done) {
-            Commands.analyze(fileName, ['party.party=Democrat', 'total_count>=50']).then((stats) => {
+            Commands.analyze(fileName, 'party.party=Democrat, total_count>=50').then((stats) => {
                 chai_1.expect(stats).to.not.be.undefined;
                 chai_1.expect(stats).to.not.be.null;
                 chai_1.expect(stats.people).to.not.be.empty;

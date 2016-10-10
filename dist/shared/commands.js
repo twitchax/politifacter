@@ -7,20 +7,22 @@ const ProgressBar = require('progress');
 const helpers = require('../shared/helpers');
 const bll_1 = require('../shared/bll');
 // Analyze commands.
-function analyze(source, selectors) {
+function analyze(source, selectionString /* comma-separated list */) {
     return new Promise((resolve, reject) => {
         fs.readFile(source, (err, d) => {
             if (err) {
                 reject(err);
             }
-            tryOrReject(() => {
+            helpers.tryOrReject(() => {
                 var data = JSON.parse(d.toString());
+                var selection = helpers.parseSelection(selectionString);
+                var selectors = selection.groups[0];
                 var selected = data;
                 _(selectors).forEach(selector => {
-                    selected = filter(selected, selector);
+                    selected = helpers.filter(selected, selector);
                 });
                 if (selected.length === 0) {
-                    throw 'No people matched the criteria.';
+                    return;
                 }
                 var selectedStatistics = _(selected).reduce(helpers.aggregateStatsForPeople, new bll_1.Statistics('', selectors));
                 console.log(selectedStatistics.toPrettyString());
@@ -30,6 +32,38 @@ function analyze(source, selectors) {
     });
 }
 exports.analyze = analyze;
+// Compare commands.
+function compare(source, selectionString /* semicolon-separated list of comma-separated lists */) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(source, (err, d) => {
+            if (err) {
+                reject(err);
+            }
+            helpers.tryOrReject(() => {
+                var data = JSON.parse(d.toString());
+                var selection = helpers.parseSelection(selectionString);
+                var statistics = [];
+                _(selection.groups).forEach(group => {
+                    var selected = data;
+                    var selectors = group.concat(selection.global);
+                    _(selectors).forEach(selector => {
+                        selected = helpers.filter(selected, selector);
+                    });
+                    if (selected.length === 0) {
+                        return;
+                    }
+                    var selectedStatistics = _(selected).reduce(helpers.aggregateStatsForPeople, new bll_1.Statistics('', selectors));
+                    statistics.push(selectedStatistics);
+                });
+                statistics = _(statistics).orderBy(s => s.percentPantsOnFire + s.percentFalse + s.percentMostlyFalse).value();
+                console.log(statistics.length);
+                console.log(helpers.getStatisticsCompareString(statistics));
+                resolve(statistics);
+            }, reject);
+        });
+    });
+}
+exports.compare = compare;
 // Example commands.
 function example(source) {
     return new Promise((resolve, reject) => {
@@ -107,71 +141,4 @@ function downloadAndSaveStatements(filename) {
     });
 }
 exports.downloadAndSaveStatements = downloadAndSaveStatements;
-// Command helpers.
-function tryOrReject(func, reject) {
-    try {
-        func();
-    }
-    catch (e) {
-        reject(e);
-    }
-}
-function filter(array, selector) {
-    if (selector.includes('>=')) {
-        var selectSplit = selector.split('>=');
-        var mode = 'greaterEqual';
-    }
-    else if (selector.includes('<=')) {
-        var selectSplit = selector.split('<=');
-        var mode = 'lessEqual';
-    }
-    else if (selector.includes('!=')) {
-        var selectSplit = selector.split('!=');
-        var mode = 'notEqual';
-    }
-    else if (selector.includes('<>')) {
-        var selectSplit = selector.split('<>');
-        var mode = 'notEqual';
-    }
-    else if (selector.includes('>')) {
-        var selectSplit = selector.split('>');
-        var mode = 'greater';
-    }
-    else if (selector.includes('<')) {
-        var selectSplit = selector.split('<');
-        var mode = 'less';
-    }
-    else if (selector.includes('=')) {
-        var selectSplit = selector.split('=');
-        var mode = 'equal';
-    }
-    else {
-        throw Error('Operator not found.');
-    }
-    var path = selectSplit[0].trim();
-    var value = selectSplit[1].trim();
-    switch (mode) {
-        case 'greaterEqual':
-            var filter = d => _.get(d, path) >= parseFloat(value);
-            break;
-        case 'lessEqual':
-            var filter = d => _.get(d, path) <= parseFloat(value);
-            break;
-        case 'notEqual':
-            var filter = d => _.get(d, path) != value;
-            break;
-        case 'greater':
-            var filter = d => _.get(d, path) > parseFloat(value);
-            break;
-        case 'less':
-            var filter = d => _.get(d, path) < parseFloat(value);
-            break;
-        case 'equal':
-            var filter = d => _.get(d, path) == value;
-            break;
-        default:
-            throw Error('Invalid operator.');
-    }
-    return _(array).filter(filter).value();
-}
 //# sourceMappingURL=commands.js.map

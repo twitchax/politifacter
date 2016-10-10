@@ -1,14 +1,13 @@
 import * as express from 'express';
 import * as fs from 'fs';
 
+import * as helpers from '../shared/helpers';
 import * as Commands from '../shared/commands';
 
 var app = express();
 var port = process.env.PORT || 3000;
 var fileName = 'people.json';
 var updateInterval = 60 * 60 * 1000;
-
-console.info(`Environment port: ${port}.`);
 
 // Global settings.
 
@@ -24,35 +23,59 @@ app.get('/', (req, res) => {
     res.send('YAY');
 });
 
-app.get('/api/analyze/:selectors/statistics', (req, res) => {
-    Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
+app.get('/api/analyze/:selectorString/statistics', (req, res) => {
+    Commands.analyze(fileName, req.params.selectorString).then((stats) => {
         res.send(stats);
     }).catch(err => {
-        res.send(500, err);
+        res.status(500).send(err);
     });
 });
 
-app.get('/api/analyze/:selectors/text', (req, res) => {
-    Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
-        res.send(stats.toString());
+app.get('/api/analyze/:selectorString/text', (req, res) => {
+    Commands.analyze(fileName, req.params.selectorString).then((stats) => {
+        res.send(stats.toPlainString());
     }).catch(err => {
-        res.send(500, err);
+        res.status(500).send(err);
     });
 });
 
-app.get('/api/analyze/:selectors/prettytext', (req, res) => {
-    Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
+app.get('/api/analyze/:selectorString/prettytext', (req, res) => {
+    Commands.analyze(fileName, req.params.selectorString).then((stats) => {
         res.send(stats.toPrettyString());
     }).catch(err => {
-        res.send(500, err);
+        res.status(500).send(err);
     });
 });
 
-app.get('/api/analyze/:selectors/htmltext', (req, res) => {
-    Commands.analyze(fileName, req.params.selectors.split(',')).then((stats) => {
-        res.send(stats.toString('<br />'));
+app.get('/api/analyze/:selectorString/htmltext', async (req, res) => {
+    Commands.analyze(fileName, req.params.selectorString).then((stats) => {
+        res.send(helpers.convertString(stats.toPlainString(), helpers.htmlOperators));
     }).catch(err => {
-        res.send(500, err);
+        res.status(500).send(err);
+    });
+});
+
+app.get('/api/compare/:selectorString/text', (req, res) => {
+    Commands.compare(fileName, req.params.selectorString).then((stats) => {
+        res.send(helpers.getPlainStatisticsCompareString(stats));
+    }).catch(err => {
+        res.status(500).send(err);
+    });
+});
+
+app.get('/api/compare/:selectorString/prettytext', (req, res) => {
+    Commands.compare(fileName, req.params.selectorString).then((stats) => {
+        res.send(helpers.getStatisticsCompareString(stats));
+    }).catch(err => {
+        res.status(500).send(err);
+    });
+});
+
+app.get('/api/compare/:selectorString/htmltext', async (req, res) => {
+    Commands.compare(fileName, req.params.selectorString).then((stats) => {
+        res.send(helpers.convertString(helpers.getPlainStatisticsCompareString(stats), helpers.htmlOperators));
+    }).catch(err => {
+        res.status(500).send(err);
     });
 });
 
@@ -72,8 +95,14 @@ setInterval(() => {
 
 // Download people and start server.
 
-Commands.downloadAndSavePeople(fileName).then(() => {
+if(!fs.existsSync(fileName)) {
+    Commands.downloadAndSavePeople(fileName).then(() => {
+        app.listen(port, () => {
+            console.log(`Listening on port ${port}!`);
+        });
+    });
+} else {
     app.listen(port, () => {
         console.log(`Listening on port ${port}!`);
     });
-});
+}
