@@ -2,11 +2,12 @@
 "use strict";
 const program = require('commander');
 const fs = require('fs');
+var pkginfo = require('pkginfo')(module);
 const server = require('../server/server');
 const Commands = require('../shared/commands');
 // Global defines.
 program
-    .version('3.1.3');
+    .version(module.exports.version);
 // Analyze commands.
 program
     .command('analyze [selectors]')

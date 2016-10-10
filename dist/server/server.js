@@ -103,8 +103,4 @@ function start(port) {
     }
 }
 exports.start = start;
-// If this script was called as main, then start server.
-if (require.main === module) {
-    start();
-}
 //# sourceMappingURL=server.js.map

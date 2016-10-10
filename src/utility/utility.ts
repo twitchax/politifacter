@@ -3,6 +3,7 @@
 import * as program from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
+var pkginfo = require('pkginfo')(module);
 
 import * as server from '../server/server';
 import * as Commands from '../shared/commands';
@@ -10,7 +11,7 @@ import * as Commands from '../shared/commands';
 // Global defines.
 
 program
-    .version('3.1.3');
+    .version(module.exports.version);
 
 // Analyze commands.
 

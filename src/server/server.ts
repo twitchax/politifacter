@@ -109,8 +109,3 @@ export function start(port?: number) {
         });
     }
 }
-
-// If this script was called as main, then start server.
-if (require.main === module) {
-    start();
-}
