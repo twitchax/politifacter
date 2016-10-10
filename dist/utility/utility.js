@@ -2,10 +2,11 @@
 "use strict";
 const program = require('commander');
 const fs = require('fs');
+const server = require('../server/server');
 const Commands = require('../shared/commands');
 // Global defines.
 program
-    .version('3.0.2');
+    .version('3.1.3');
 // Analyze commands.
 program
     .command('analyze [selectors]')
@@ -61,6 +62,13 @@ program
     .description('deletes file at path <fileName>.')
     .action((fileName) => {
     fs.unlinkSync(fileName);
+});
+// Server commands.
+program
+    .command('server [port]')
+    .description('starts the politifacter server.')
+    .action((port) => {
+    server.start(port);
 });
 // Get commands.
 program

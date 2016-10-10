@@ -4,12 +4,13 @@ import * as program from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
 
+import * as server from '../server/server';
 import * as Commands from '../shared/commands';
 
 // Global defines.
 
 program
-    .version('3.0.2');
+    .version('3.1.3');
 
 // Analyze commands.
 
@@ -73,6 +74,15 @@ program
     .description('deletes file at path <fileName>.')
     .action((fileName) => {
         fs.unlinkSync(fileName);
+    });
+
+// Server commands.
+
+program
+    .command('server [port]')
+    .description('starts the politifacter server.')
+    .action((port) => {
+        server.start(port);
     });
 
 // Get commands.

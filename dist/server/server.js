@@ -12,7 +12,7 @@ const fs = require('fs');
 const helpers = require('../shared/helpers');
 const Commands = require('../shared/commands');
 var app = express();
-var port = process.env.PORT || 3000;
+var defaultPort = process.env.PORT || 3000;
 var fileName = 'people.json';
 var updateInterval = 60 * 60 * 1000;
 // Global settings.
@@ -81,21 +81,30 @@ app.get('/api/example', (req, res) => {
         res.send(500, err);
     });
 });
-// Get new people every hour.
-setInterval(() => {
-    Commands.downloadAndSavePeople(fileName);
-}, updateInterval);
-// Download people and start server.
-if (!fs.existsSync(fileName)) {
-    Commands.downloadAndSavePeople(fileName).then(() => {
+function start(port) {
+    if (!port)
+        port = defaultPort;
+    // Get new people every hour.
+    setInterval(() => {
+        Commands.downloadAndSavePeople(fileName);
+    }, updateInterval);
+    // Download people and start server.
+    if (!fs.existsSync(fileName)) {
+        Commands.downloadAndSavePeople(fileName).then(() => {
+            app.listen(port, () => {
+                console.log(`Listening on port ${port}!`);
+            });
+        });
+    }
+    else {
         app.listen(port, () => {
             console.log(`Listening on port ${port}!`);
         });
-    });
+    }
 }
-else {
-    app.listen(port, () => {
-        console.log(`Listening on port ${port}!`);
-    });
+exports.start = start;
+// If this script was called as main, then start server.
+if (require.main === module) {
+    start();
 }
 //# sourceMappingURL=server.js.map

@@ -5,7 +5,7 @@ import * as helpers from '../shared/helpers';
 import * as Commands from '../shared/commands';
 
 var app = express();
-var port = process.env.PORT || 3000;
+var defaultPort = process.env.PORT || 3000;
 var fileName = 'people.json';
 var updateInterval = 60 * 60 * 1000;
 
@@ -87,22 +87,30 @@ app.get('/api/example', (req, res) => {
     });
 });
 
-// Get new people every hour.
+export function start(port?: number) {
+    if(!port)
+        port = defaultPort;
 
-setInterval(() => {
-    Commands.downloadAndSavePeople(fileName);
-}, updateInterval);
+    // Get new people every hour.
+    setInterval(() => {
+        Commands.downloadAndSavePeople(fileName);
+    }, updateInterval);
 
-// Download people and start server.
-
-if(!fs.existsSync(fileName)) {
-    Commands.downloadAndSavePeople(fileName).then(() => {
+    // Download people and start server.
+    if(!fs.existsSync(fileName)) {
+        Commands.downloadAndSavePeople(fileName).then(() => {
+            app.listen(port, () => {
+                console.log(`Listening on port ${port}!`);
+            });
+        });
+    } else {
         app.listen(port, () => {
             console.log(`Listening on port ${port}!`);
         });
-    });
-} else {
-    app.listen(port, () => {
-        console.log(`Listening on port ${port}!`);
-    });
+    }
+}
+
+// If this script was called as main, then start server.
+if (require.main === module) {
+    start();
 }
