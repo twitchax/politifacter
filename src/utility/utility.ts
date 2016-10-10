@@ -9,7 +9,7 @@ import * as Commands from '../shared/commands';
 // Global defines.
 
 program
-    .version('3.0.0');
+    .version('3.0.1');
 
 // Analyze commands.
 

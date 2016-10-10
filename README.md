@@ -131,6 +131,11 @@ yields
    [<<<<<<<<<<<<<<<<<<<<<<<----------------------------======================~~~~~~~~~~~~~~~---------->>]
 ```
 
+Try this one to recreate something like [this graph](http://mannmetrics.com/who-lies-more/).
+```bash
+pf compare "total_count>=10|name_slug=barack-obama;name_slug=donald-trump;name_slug=hillary-clinton;name_slug=harry-reid;name_slug=nancy-pelosi;name_slug=john-kerry;name_slug=michele-bachmann;name_slug=ted-cruz;name_slug=newt-gingrich;name_slug=sarah-palin;name_slug=rick-santorum;name_slug=scott-walker;name_slug=paul-ryan;name_slug=rick-perry;name_slug=john-mccain;name_slug=marco-rubio;name_slug=mitt-romney;name_slug=rand-paul;name_slug=chris-christie;name_slug=joe-biden;name_slug=john-kasich;name_slug=bernie-sanders;name_slug=jeb-bush"
+``
+
 #### Web service
 There is a small web server included in this package that is propped up.  Here are some example calls.
 
@@ -195,7 +200,7 @@ Lying score: 25.40%
    Pants On Fire : [=] 1.6 ± 4.9% (10)
 ```
 
-Finally, you can also get the statistics objec that is aggregated on the server:
+Finally, you can also get the statistics object that is aggregated on the server:
 ```bash
 curl http://politifacter.ajroney.com/api/analyze/party.party=Democrat,total_count%3E=50/statistics | python -m json.tool
 ```
