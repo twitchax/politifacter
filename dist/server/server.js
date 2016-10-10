@@ -46,7 +46,7 @@ app.get('/api/analyze/:selectorString/prettytext', (req, res) => {
         res.status(500).send(err);
     });
 });
-app.get('/api/analyze/:selectorString/htmltext', (req, res) => __awaiter(this, void 0, void 0, function* () {
+app.get('/api/analyze/:selectorString/html', (req, res) => __awaiter(this, void 0, void 0, function* () {
     Commands.analyze(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.convertString(stats.toPlainString(), helpers.htmlOperators));
     }).catch(err => {
@@ -67,7 +67,7 @@ app.get('/api/compare/:selectorString/prettytext', (req, res) => {
         res.status(500).send(err);
     });
 });
-app.get('/api/compare/:selectorString/htmltext', (req, res) => __awaiter(this, void 0, void 0, function* () {
+app.get('/api/compare/:selectorString/html', (req, res) => __awaiter(this, void 0, void 0, function* () {
     Commands.compare(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.convertString(helpers.getPlainStatisticsCompareString(stats), helpers.htmlOperators));
     }).catch(err => {

@@ -47,7 +47,7 @@ app.get('/api/analyze/:selectorString/prettytext', (req, res) => {
     });
 });
 
-app.get('/api/analyze/:selectorString/htmltext', async (req, res) => {
+app.get('/api/analyze/:selectorString/html', async (req, res) => {
     Commands.analyze(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.convertString(stats.toPlainString(), helpers.htmlOperators));
     }).catch(err => {
@@ -71,7 +71,7 @@ app.get('/api/compare/:selectorString/prettytext', (req, res) => {
     });
 });
 
-app.get('/api/compare/:selectorString/htmltext', async (req, res) => {
+app.get('/api/compare/:selectorString/html', async (req, res) => {
     Commands.compare(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.convertString(helpers.getPlainStatisticsCompareString(stats), helpers.htmlOperators));
     }).catch(err => {
