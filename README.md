@@ -118,6 +118,19 @@ Lying score: 26.62%
    Pants On Fire : [=] 1.98 ± 1.53% (21)
 ```
 
+Also, there is a compare feature:
+```bash
+pf compare "party.party=Democrat,total_count>=50|name_slug=hillary-clinton;name_slug=barack-obama"
+```
+yields
+```
+[ name_slug == barack-obama, party.party == Democrat, total_count >= 50 ]
+   [<<<<<<<<<<<<<<<<<<<<<---------------------------===========================~~~~~~~~~~~~------------>]
+
+[ name_slug == hillary-clinton, party.party == Democrat, total_count >= 50 ]
+   [<<<<<<<<<<<<<<<<<<<<<<<----------------------------======================~~~~~~~~~~~~~~~---------->>]
+```
+
 #### Web service
 There is a small web server included in this package that is propped up.  Here are some example calls.
 
