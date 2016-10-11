@@ -7,6 +7,7 @@
     "express": "registry:dt/express#4.0.0+20160708185218",
     "express-serve-static-core": "registry:dt/express-serve-static-core#4.0.0+20161008174359",
     "fast-stats": "registry:dt/fast-stats#0.0.0+20160316155526",
+    "fs-extra": "registry:dt/fs-extra#0.0.0+20161004190449",
     "lodash": "registry:dt/lodash#4.14.0+20161004174455",
     "mime": "registry:dt/mime#0.0.0+20160316155526",
     "progress": "registry:dt/progress#1.1.8+20160906145338",

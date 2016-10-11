@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import * as fs from 'fs';
 
 import { Person } from '../shared/bll';
-import * as Commands from '../shared/commands';
+import * as commands from '../shared/commands';
 
 describe('p0', function () {
     var fileName = 'people.json';
@@ -10,7 +10,7 @@ describe('p0', function () {
     before(function (done) {
         this.timeout(30000);
 
-        Commands.downloadAndSavePeople(fileName).then((people) => {
+        commands.downloadAndSavePeople(fileName).then((people) => {
             expect(people).to.not.be.empty;
             expect(fs.existsSync(fileName)).to.be.true;
             done();
@@ -36,7 +36,7 @@ describe('p0', function () {
 
     describe('#analyze()', function () {
         it('check that we can analyze', function (done) {
-            Commands.analyze(fileName, 'first_name=Barack, last_name=Obama').then((stats) => {
+            commands.analyze(fileName, 'first_name=Barack, last_name=Obama').then((stats) => {
                 expect(stats).to.not.be.undefined;
                 expect(stats).to.not.be.null;
                 expect(stats.people).to.not.be.empty;
@@ -46,7 +46,7 @@ describe('p0', function () {
         });
         
         it('check that analyze can fail', function (done) {
-            Commands.analyze(fileName, 'first_nameBarack').then(() => {
+            commands.analyze(fileName, 'first_nameBarack').then(() => {
                 done(Error('Completed successfully'));
             }).catch(() => {
                 done();
@@ -54,7 +54,7 @@ describe('p0', function () {
         });
 
         it('check that analyze can do advanced selection', function (done) {
-            Commands.analyze(fileName, 'party.party=Democrat, total_count>=50').then((stats) => {
+            commands.analyze(fileName, 'party.party=Democrat, total_count>=50').then((stats) => {
                 expect(stats).to.not.be.undefined;
                 expect(stats).to.not.be.null;
                 expect(stats.people).to.not.be.empty;
@@ -71,7 +71,7 @@ describe('p1', function () {
     before(function (done) {
         this.timeout(300000);
 
-        Commands.downloadAndSaveStatements(fileName).then((people) => {
+        commands.downloadAndSaveStatements(fileName).then((people) => {
             expect(people).to.not.be.empty;
             expect(fs.existsSync(fileName)).to.be.true;
             done();

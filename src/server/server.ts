@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as fs from 'fs';
 
 import * as helpers from '../shared/helpers';
-import * as Commands from '../shared/commands';
+import * as commands from '../shared/commands';
 
 var app = express();
 var defaultPort = process.env.PORT || 3000;
@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/analyze/:selectorString/statistics', (req, res) => {
-    Commands.analyze(fileName, req.params.selectorString).then((stats) => {
+    commands.analyze(fileName, req.params.selectorString).then((stats) => {
         res.send(stats);
     }).catch(err => {
         res.status(500).send(err);
@@ -32,7 +32,7 @@ app.get('/api/analyze/:selectorString/statistics', (req, res) => {
 });
 
 app.get('/api/analyze/:selectorString/text', (req, res) => {
-    Commands.analyze(fileName, req.params.selectorString).then((stats) => {
+    commands.analyze(fileName, req.params.selectorString).then((stats) => {
         res.send(stats.toPlainString());
     }).catch(err => {
         res.status(500).send(err);
@@ -40,7 +40,7 @@ app.get('/api/analyze/:selectorString/text', (req, res) => {
 });
 
 app.get('/api/analyze/:selectorString/prettytext', (req, res) => {
-    Commands.analyze(fileName, req.params.selectorString).then((stats) => {
+    commands.analyze(fileName, req.params.selectorString).then((stats) => {
         res.send(stats.toPrettyString());
     }).catch(err => {
         res.status(500).send(err);
@@ -48,7 +48,7 @@ app.get('/api/analyze/:selectorString/prettytext', (req, res) => {
 });
 
 app.get('/api/analyze/:selectorString/html', async (req, res) => {
-    Commands.analyze(fileName, req.params.selectorString).then((stats) => {
+    commands.analyze(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.convertString(stats.toPlainString(), helpers.htmlOperators));
     }).catch(err => {
         res.status(500).send(err);
@@ -56,7 +56,7 @@ app.get('/api/analyze/:selectorString/html', async (req, res) => {
 });
 
 app.get('/api/compare/:selectorString/text', (req, res) => {
-    Commands.compare(fileName, req.params.selectorString).then((stats) => {
+    commands.compare(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.getPlainStatisticsCompareString(stats));
     }).catch(err => {
         res.status(500).send(err);
@@ -64,7 +64,7 @@ app.get('/api/compare/:selectorString/text', (req, res) => {
 });
 
 app.get('/api/compare/:selectorString/prettytext', (req, res) => {
-    Commands.compare(fileName, req.params.selectorString).then((stats) => {
+    commands.compare(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.getStatisticsCompareString(stats));
     }).catch(err => {
         res.status(500).send(err);
@@ -72,7 +72,7 @@ app.get('/api/compare/:selectorString/prettytext', (req, res) => {
 });
 
 app.get('/api/compare/:selectorString/html', async (req, res) => {
-    Commands.compare(fileName, req.params.selectorString).then((stats) => {
+    commands.compare(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.convertString(helpers.getPlainStatisticsCompareString(stats), helpers.htmlOperators));
     }).catch(err => {
         res.status(500).send(err);
@@ -80,7 +80,7 @@ app.get('/api/compare/:selectorString/html', async (req, res) => {
 });
 
 app.get('/api/example', (req, res) => {
-    Commands.example(fileName).then((person) => {
+    commands.example(fileName).then((person) => {
         res.send(person);
     }).catch(err => {
         res.send(500, err);
@@ -93,12 +93,12 @@ export function start(port?: number) {
 
     // Get new people every hour.
     setInterval(() => {
-        Commands.downloadAndSavePeople(fileName);
+        commands.downloadAndSavePeople(fileName);
     }, updateInterval);
 
     // Download people and start server.
     if(!fs.existsSync(fileName)) {
-        Commands.downloadAndSavePeople(fileName).then(() => {
+        commands.downloadAndSavePeople(fileName).then(() => {
             app.listen(port, () => {
                 console.log(`Listening on port ${port}!`);
             });

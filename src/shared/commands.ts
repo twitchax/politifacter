@@ -9,11 +9,12 @@ import { Statistics, Person, Statement, Selection } from '../shared/bll';
 
 // Analyze commands.
 
-export function analyze(source: string, selectionString: string /* comma-separated list */) : Promise<Statistics> {
+export function analyze(fileSource: string, selectionString: string /* comma-separated list */) : Promise<Statistics> {
     return new Promise((resolve: (stats: Statistics) => void, reject: (err: Error) => void) => {
-        fs.readFile(source, (err, d) => {
+        fs.readFile(fileSource, (err, d) => {
             if (err) {
                 reject(err);
+                return;
             }
 
             helpers.tryOrReject(() => {
@@ -32,8 +33,31 @@ export function analyze(source: string, selectionString: string /* comma-separat
                 
                 var selectedStatistics = _(selected).reduce(helpers.aggregateStatsForPeople, new Statistics('', selectors));
                 
-                console.log(selectedStatistics.toPrettyString());
                 resolve(selectedStatistics);
+            }, reject);
+        });
+    });
+}
+
+// Search commands.
+
+export function search(fileSource: string, terms: string[]) : Promise<Statement[]> {
+    return new Promise((resolve: (stats: Statement[]) => void, reject: (err: Error) => void) => {
+        fs.readFile(fileSource, (err, d) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            helpers.tryOrReject(() => {
+                var data = JSON.parse(d.toString());
+                var result: Statement[] = data;
+                
+                _(terms).forEach(term => {
+                    result = _(result).filter(s => s.ruling_comments.toLowerCase().includes(term)).value();
+                });
+                
+                resolve(result);
             }, reject);
         });
     });
@@ -41,11 +65,12 @@ export function analyze(source: string, selectionString: string /* comma-separat
 
 // Compare commands.
 
-export function compare(source: string, selectionString: string /* semicolon-separated list of comma-separated lists */) : Promise<Statistics[]> {
+export function compare(fileSource: string, selectionString: string /* semicolon-separated list of comma-separated lists */) : Promise<Statistics[]> {
     return new Promise((resolve: (stats: Statistics[]) => void, reject: (err: Error) => void) => {
-        fs.readFile(source, (err, d) => {
+        fs.readFile(fileSource, (err, d) => {
             if (err) {
                 reject(err);
+                return;
             }
 
             helpers.tryOrReject(() => {
@@ -72,10 +97,7 @@ export function compare(source: string, selectionString: string /* semicolon-sep
                 });
             
                 statistics = _(statistics).orderBy(s => s.percentPantsOnFire + s.percentFalse + s.percentMostlyFalse).value();
-
-                console.log(statistics.length);
                 
-                console.log(helpers.getStatisticsCompareString(statistics))
                 resolve(statistics);
             }, reject);
         });
@@ -84,16 +106,17 @@ export function compare(source: string, selectionString: string /* semicolon-sep
 
 // Example commands.
 
-export function example(source: string) : Promise<Person> {
-    return new Promise((resolve: (stats: Person) => void, reject: (err: Error) => void) => {
-        fs.readFile(source, (err, d) => {
-            if(err)
+export function example(fileSource: string) : Promise<Person | Statement> {
+    return new Promise((resolve: (stats: Person | Statement) => void, reject: (err: Error) => void) => {
+        fs.readFile(fileSource, (err, d) => {
+            if(err) {
                 reject(err);
+                return;
+            }
 
-            var person = JSON.parse(d.toString())[0] as Person;
+            var object = JSON.parse(d.toString())[0];
 
-            console.log(JSON.stringify(person, null, 4));
-            resolve(person);
+            resolve(object);
         });
     });
 }
@@ -109,7 +132,7 @@ var baseRequest = request.defaults({
     json: true
 });
 
-export function downloadAndSavePeople(filename: string) : Promise<Person[]> {
+export function downloadAndSavePeople(fileTarget: string) : Promise<Person[]> {
     return new Promise((resolve: (people: Person[]) => void, reject: (err: Error) => void) => {
         var bar = new ProgressBar('   downloading [:bar] :percent :etas', { total: batchMax / batchSize });
 
@@ -128,23 +151,26 @@ export function downloadAndSavePeople(filename: string) : Promise<Person[]> {
         }).value();
 
         async.parallel(functions, (err, results) => {
-            if(err)
+            if(err) {
                 reject(err);
+                return;
+            }
 
-            var superResult = _(results).flattenDeep().orderBy((p: Person) => p.total_count).reverse().value() as Person[];
+            var people = _(results).flattenDeep().orderBy((p: Person) => p.total_count).reverse().value() as Person[];
 
-            fs.writeFile(filename, JSON.stringify(superResult, null, 4), err => {
-                if(err)
+            fs.writeFile(fileTarget, JSON.stringify(people, null, 4), err => {
+                if(err) {
                     reject(err);
+                    return;
+                }
 
-                console.log("The file was saved!");
-                resolve(superResult);
+                resolve(people);
             });
         });
     });
 }
 
-export function downloadAndSaveStatements(filename: string) : Promise<Statement[]> {
+export function downloadAndSaveStatements(fileTarget: string) : Promise<Statement[]> {
     return new Promise((resolve: (statements: Statement[]) => void, reject: (err: Error) => void) => {
         var bar = new ProgressBar('   downloading [:bar] :percent :etas', { total: batchMax / batchSize });
 
@@ -163,17 +189,20 @@ export function downloadAndSaveStatements(filename: string) : Promise<Statement[
         }).value();
 
         async.parallel(functions, (err, results) => {
-            if(err)
+            if(err) {
                 reject(err);
+                return;
+            }
 
             var statements = _.flattenDeep(results) as Statement[];
 
-            fs.writeFile(filename, JSON.stringify(statements), err => {
-                if(err)
+            fs.writeFile(fileTarget, JSON.stringify(statements), err => {
+                if(err) {
                     reject(err);
+                    return;
+                }
 
                 resolve(statements);
-                console.log("The file was saved!");
             });
         });
     });

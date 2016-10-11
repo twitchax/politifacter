@@ -7,11 +7,12 @@ const ProgressBar = require('progress');
 const helpers = require('../shared/helpers');
 const bll_1 = require('../shared/bll');
 // Analyze commands.
-function analyze(source, selectionString /* comma-separated list */) {
+function analyze(fileSource, selectionString /* comma-separated list */) {
     return new Promise((resolve, reject) => {
-        fs.readFile(source, (err, d) => {
+        fs.readFile(fileSource, (err, d) => {
             if (err) {
                 reject(err);
+                return;
             }
             helpers.tryOrReject(() => {
                 var data = JSON.parse(d.toString());
@@ -25,19 +26,39 @@ function analyze(source, selectionString /* comma-separated list */) {
                     return;
                 }
                 var selectedStatistics = _(selected).reduce(helpers.aggregateStatsForPeople, new bll_1.Statistics('', selectors));
-                console.log(selectedStatistics.toPrettyString());
                 resolve(selectedStatistics);
             }, reject);
         });
     });
 }
 exports.analyze = analyze;
-// Compare commands.
-function compare(source, selectionString /* semicolon-separated list of comma-separated lists */) {
+// Search commands.
+function search(fileSource, terms) {
     return new Promise((resolve, reject) => {
-        fs.readFile(source, (err, d) => {
+        fs.readFile(fileSource, (err, d) => {
             if (err) {
                 reject(err);
+                return;
+            }
+            helpers.tryOrReject(() => {
+                var data = JSON.parse(d.toString());
+                var result = data;
+                _(terms).forEach(term => {
+                    result = _(result).filter(s => s.ruling_comments.toLowerCase().includes(term)).value();
+                });
+                resolve(result);
+            }, reject);
+        });
+    });
+}
+exports.search = search;
+// Compare commands.
+function compare(fileSource, selectionString /* semicolon-separated list of comma-separated lists */) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(fileSource, (err, d) => {
+            if (err) {
+                reject(err);
+                return;
             }
             helpers.tryOrReject(() => {
                 var data = JSON.parse(d.toString());
@@ -56,8 +77,6 @@ function compare(source, selectionString /* semicolon-separated list of comma-se
                     statistics.push(selectedStatistics);
                 });
                 statistics = _(statistics).orderBy(s => s.percentPantsOnFire + s.percentFalse + s.percentMostlyFalse).value();
-                console.log(statistics.length);
-                console.log(helpers.getStatisticsCompareString(statistics));
                 resolve(statistics);
             }, reject);
         });
@@ -65,14 +84,15 @@ function compare(source, selectionString /* semicolon-separated list of comma-se
 }
 exports.compare = compare;
 // Example commands.
-function example(source) {
+function example(fileSource) {
     return new Promise((resolve, reject) => {
-        fs.readFile(source, (err, d) => {
-            if (err)
+        fs.readFile(fileSource, (err, d) => {
+            if (err) {
                 reject(err);
-            var person = JSON.parse(d.toString())[0];
-            console.log(JSON.stringify(person, null, 4));
-            resolve(person);
+                return;
+            }
+            var object = JSON.parse(d.toString())[0];
+            resolve(object);
         });
     });
 }
@@ -85,7 +105,7 @@ var baseRequest = request.defaults({
     baseUrl: 'http://www.politifact.com/',
     json: true
 });
-function downloadAndSavePeople(filename) {
+function downloadAndSavePeople(fileTarget) {
     return new Promise((resolve, reject) => {
         var bar = new ProgressBar('   downloading [:bar] :percent :etas', { total: batchMax / batchSize });
         var functions = _(offsets).map(o => {
@@ -100,20 +120,23 @@ function downloadAndSavePeople(filename) {
             };
         }).value();
         async.parallel(functions, (err, results) => {
-            if (err)
+            if (err) {
                 reject(err);
-            var superResult = _(results).flattenDeep().orderBy((p) => p.total_count).reverse().value();
-            fs.writeFile(filename, JSON.stringify(superResult, null, 4), err => {
-                if (err)
+                return;
+            }
+            var people = _(results).flattenDeep().orderBy((p) => p.total_count).reverse().value();
+            fs.writeFile(fileTarget, JSON.stringify(people, null, 4), err => {
+                if (err) {
                     reject(err);
-                console.log("The file was saved!");
-                resolve(superResult);
+                    return;
+                }
+                resolve(people);
             });
         });
     });
 }
 exports.downloadAndSavePeople = downloadAndSavePeople;
-function downloadAndSaveStatements(filename) {
+function downloadAndSaveStatements(fileTarget) {
     return new Promise((resolve, reject) => {
         var bar = new ProgressBar('   downloading [:bar] :percent :etas', { total: batchMax / batchSize });
         var functions = _(offsets).map(o => {
@@ -128,14 +151,17 @@ function downloadAndSaveStatements(filename) {
             };
         }).value();
         async.parallel(functions, (err, results) => {
-            if (err)
+            if (err) {
                 reject(err);
+                return;
+            }
             var statements = _.flattenDeep(results);
-            fs.writeFile(filename, JSON.stringify(statements), err => {
-                if (err)
+            fs.writeFile(fileTarget, JSON.stringify(statements), err => {
+                if (err) {
                     reject(err);
+                    return;
+                }
                 resolve(statements);
-                console.log("The file was saved!");
             });
         });
     });

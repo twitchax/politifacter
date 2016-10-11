@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const express = require('express');
 const fs = require('fs');
 const helpers = require('../shared/helpers');
-const Commands = require('../shared/commands');
+const commands = require('../shared/commands');
 var app = express();
 var defaultPort = process.env.PORT || 3000;
 var fileName = 'people.json';
@@ -26,56 +26,56 @@ app.get('/', (req, res) => {
     res.send('YAY');
 });
 app.get('/api/analyze/:selectorString/statistics', (req, res) => {
-    Commands.analyze(fileName, req.params.selectorString).then((stats) => {
+    commands.analyze(fileName, req.params.selectorString).then((stats) => {
         res.send(stats);
     }).catch(err => {
         res.status(500).send(err);
     });
 });
 app.get('/api/analyze/:selectorString/text', (req, res) => {
-    Commands.analyze(fileName, req.params.selectorString).then((stats) => {
+    commands.analyze(fileName, req.params.selectorString).then((stats) => {
         res.send(stats.toPlainString());
     }).catch(err => {
         res.status(500).send(err);
     });
 });
 app.get('/api/analyze/:selectorString/prettytext', (req, res) => {
-    Commands.analyze(fileName, req.params.selectorString).then((stats) => {
+    commands.analyze(fileName, req.params.selectorString).then((stats) => {
         res.send(stats.toPrettyString());
     }).catch(err => {
         res.status(500).send(err);
     });
 });
 app.get('/api/analyze/:selectorString/html', (req, res) => __awaiter(this, void 0, void 0, function* () {
-    Commands.analyze(fileName, req.params.selectorString).then((stats) => {
+    commands.analyze(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.convertString(stats.toPlainString(), helpers.htmlOperators));
     }).catch(err => {
         res.status(500).send(err);
     });
 }));
 app.get('/api/compare/:selectorString/text', (req, res) => {
-    Commands.compare(fileName, req.params.selectorString).then((stats) => {
+    commands.compare(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.getPlainStatisticsCompareString(stats));
     }).catch(err => {
         res.status(500).send(err);
     });
 });
 app.get('/api/compare/:selectorString/prettytext', (req, res) => {
-    Commands.compare(fileName, req.params.selectorString).then((stats) => {
+    commands.compare(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.getStatisticsCompareString(stats));
     }).catch(err => {
         res.status(500).send(err);
     });
 });
 app.get('/api/compare/:selectorString/html', (req, res) => __awaiter(this, void 0, void 0, function* () {
-    Commands.compare(fileName, req.params.selectorString).then((stats) => {
+    commands.compare(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.convertString(helpers.getPlainStatisticsCompareString(stats), helpers.htmlOperators));
     }).catch(err => {
         res.status(500).send(err);
     });
 }));
 app.get('/api/example', (req, res) => {
-    Commands.example(fileName).then((person) => {
+    commands.example(fileName).then((person) => {
         res.send(person);
     }).catch(err => {
         res.send(500, err);
@@ -86,11 +86,11 @@ function start(port) {
         port = defaultPort;
     // Get new people every hour.
     setInterval(() => {
-        Commands.downloadAndSavePeople(fileName);
+        commands.downloadAndSavePeople(fileName);
     }, updateInterval);
     // Download people and start server.
     if (!fs.existsSync(fileName)) {
-        Commands.downloadAndSavePeople(fileName).then(() => {
+        commands.downloadAndSavePeople(fileName).then(() => {
             app.listen(port, () => {
                 console.log(`Listening on port ${port}!`);
             });

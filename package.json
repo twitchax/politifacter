@@ -1,6 +1,6 @@
 {
   "name": "politifacter",
-  "version": "3.1.5",
+  "version": "4.0.0",
   "description": "A politifact aggregator.",
   "main": "./dist/shared/commands.js",
   "engines": {
@@ -17,6 +17,7 @@
     "express": "^4.14.0",
     "fast-stats": "0.0.3",
     "fs": "0.0.1-security",
+    "fs-extra": "^0.30.0",
     "lodash": "^4.16.3",
     "pkginfo": "^0.4.0",
     "progress": "^1.1.8",
