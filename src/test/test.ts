@@ -5,7 +5,7 @@ import { Person } from '../shared/bll';
 import * as commands from '../shared/commands';
 
 describe('p0', function () {
-    var fileName = 'people.json';
+    var fileName = '.pfcache/people.json';
 
     before(function (done) {
         this.timeout(30000);

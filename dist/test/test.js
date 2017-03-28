@@ -4,7 +4,7 @@ const chai_1 = require("chai");
 const fs = require("fs");
 const commands = require("../shared/commands");
 describe('p0', function () {
-    var fileName = 'people.json';
+    var fileName = '.pfcache/people.json';
     before(function (done) {
         this.timeout(30000);
         commands.downloadAndSavePeople(fileName).then((people) => {

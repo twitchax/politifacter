@@ -14,7 +14,7 @@ const helpers = require("../shared/helpers");
 const commands = require("../shared/commands");
 var app = express();
 var defaultPort = process.env.PORT || 3000;
-var fileName = 'people.json';
+var fileName = '.pfcache/people.json';
 var updateInterval = 60 * 60 * 1000;
 // Global settings.
 app.use(function (req, res, next) {

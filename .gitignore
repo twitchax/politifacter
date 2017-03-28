@@ -1,7 +1,5 @@
 .vscode
 node_modules
-typings
-.pfcache
 npm-debug*
 
 people.json

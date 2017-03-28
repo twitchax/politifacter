@@ -6,7 +6,7 @@ import * as commands from '../shared/commands';
 
 var app = express();
 var defaultPort = process.env.PORT || 3000;
-var fileName = 'people.json';
+var fileName = '.pfcache/people.json';
 var updateInterval = 60 * 60 * 1000;
 
 // Global settings.
