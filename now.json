@@ -1,0 +1,7 @@
+{
+  "name": "politifacter", 
+  "alias": "politifacter", 
+  "env": {
+    "CACHE_PATH": "/tmp"
+  }
+}
