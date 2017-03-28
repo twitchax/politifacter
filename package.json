@@ -43,7 +43,7 @@
     "typescript": "^2.2.2"
   },
   "scripts": {
-    "pretest": "node_modules/.bin/tsc",
+    "postinstall": "tsc",
     "test": "mocha dist/test/test.js -R spec --grep p0",
     "start": "node dist/server/start.js"
   },
