@@ -1,7 +1,8 @@
 "use strict";
-const chai_1 = require('chai');
-const fs = require('fs');
-const commands = require('../shared/commands');
+Object.defineProperty(exports, "__esModule", { value: true });
+const chai_1 = require("chai");
+const fs = require("fs");
+const commands = require("../shared/commands");
 describe('p0', function () {
     var fileName = 'people.json';
     before(function (done) {

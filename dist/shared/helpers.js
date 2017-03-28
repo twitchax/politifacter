@@ -1,7 +1,8 @@
 "use strict";
-const _ = require('lodash');
-const colors = require('colors');
-const bll_1 = require('./bll');
+Object.defineProperty(exports, "__esModule", { value: true });
+const _ = require("lodash");
+const colors = require("colors");
+const bll_1 = require("./bll");
 // Math helpers.
 function aggregateStatsForPeople(agg, person) {
     var total = person.pants_count + person.false_count + person.barely_true_count + person.half_true_count + person.mostly_true_count + person.true_count;

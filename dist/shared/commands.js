@@ -1,11 +1,12 @@
 "use strict";
-const request = require('request');
-const _ = require('lodash');
-const fs = require('fs');
-const async = require('async');
-const ProgressBar = require('progress');
-const helpers = require('../shared/helpers');
-const bll_1 = require('../shared/bll');
+Object.defineProperty(exports, "__esModule", { value: true });
+const request = require("request");
+const _ = require("lodash");
+const fs = require("fs");
+const async = require("async");
+const ProgressBar = require("progress");
+const helpers = require("../shared/helpers");
+const bll_1 = require("../shared/bll");
 // Analyze commands.
 function analyze(fileSource, selectionString /* comma-separated list */) {
     return new Promise((resolve, reject) => {
@@ -17,7 +18,7 @@ function analyze(fileSource, selectionString /* comma-separated list */) {
             helpers.tryOrReject(() => {
                 var data = JSON.parse(d.toString());
                 var selection = helpers.parseSelection(selectionString);
-                var selectors = selection.groups[0];
+                var selectors = selection.groups[0] /* should only have one group */;
                 var selected = data;
                 _(selectors).forEach(selector => {
                     selected = helpers.filter(selected, selector);

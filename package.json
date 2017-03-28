@@ -1,39 +1,51 @@
 {
   "name": "politifacter",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "A politifact aggregator.",
   "main": "./dist/shared/commands.js",
   "engines": {
-    "node": "6.7.0"
+    "node": "7.7.4"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/aaronroney/politifacter.git"
   },
   "dependencies": {
-    "async": "^2.0.1",
+    "async": "^2.2.0",
     "colors": "^1.1.2",
     "commander": "^2.9.0",
-    "express": "^4.14.0",
+    "express": "^4.15.2",
     "fast-stats": "0.0.3",
     "fs": "0.0.1-security",
     "fs-extra": "^0.30.0",
-    "lodash": "^4.16.3",
+    "lodash": "^4.17.4",
     "pkginfo": "^0.4.0",
     "progress": "^1.1.8",
-    "request": "^2.74.0"
+    "request": "^2.81.0"
   },
   "devDependencies": {
+    "@types/async": "^2.0.40",
+    "@types/chai": "^3.4.35",
+    "@types/colors": "^1.1.1",
+    "@types/commander": "^2.3.31",
+    "@types/express": "^4.0.35",
+    "@types/express-serve-static-core": "^4.0.44",
+    "@types/fast-stats": "0.0.29",
+    "@types/fs-extra": "^2.0.0",
+    "@types/lodash": "^4.14.58",
+    "@types/mime": "0.0.29",
+    "@types/mocha": "^2.2.40",
+    "@types/progress": "^1.1.28",
+    "@types/serve-static": "^1.7.31",
+    "@types/typescript": "^2.0.0",
     "chai": "^3.5.0",
-    "mocha": "^3.1.0",
-    "tsc": "^1.20150623.0",
-    "typescript": "^2.0.3",
-    "typings": "^1.4.0"
+    "mocha": "^3.2.0",
+    "typescript": "^2.2.2"
   },
   "scripts": {
-    "build": "node_modules/.bin/tsc",
-    "typings": "node_modules/.bin/typings install",
-    "test": "node_modules/.bin/mocha dist/test/test.js -R spec --grep p0",
+    "pretest": "node_modules/.bin/tsc",
+    "test": "mocha dist/test/test.js -R spec --grep p0",
+    "prestart": "node_modules/.bin/tsc",
     "start": "node dist/server/start.js"
   },
   "bin": {

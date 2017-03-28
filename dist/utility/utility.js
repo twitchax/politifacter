@@ -3,18 +3,19 @@
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments)).next());
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const program = require('commander');
-const fs = require('fs');
-const fse = require('fs-extra');
+Object.defineProperty(exports, "__esModule", { value: true });
+const program = require("commander");
+const fs = require("fs");
+const fse = require("fs-extra");
 var pkginfo = require('pkginfo')(module);
-const server = require('../server/server');
-const commands = require('../shared/commands');
-const helpers = require('../shared/helpers');
+const server = require("../server/server");
+const commands = require("../shared/commands");
+const helpers = require("../shared/helpers");
 // Variables.
 const cacheDirectory = '.pfcache';
 const peopleFile = `${cacheDirectory}/people.json`;

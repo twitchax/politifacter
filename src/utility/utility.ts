@@ -18,7 +18,7 @@ const statementsFile = `${cacheDirectory}/statements.json`;
 
 // Helpers.
 
-function ensureFile(fileName: string, force: boolean = false) : Promise<void> {
+function ensureFile(fileName: string, force: boolean = false) : Promise<{}> {
     return new Promise(async (resolve: () => void, reject: (x: Error) => void) => {
         if (!fs.existsSync(cacheDirectory)){
             fs.mkdirSync(cacheDirectory);

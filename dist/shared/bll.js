@@ -1,9 +1,10 @@
 "use strict";
-const _ = require('lodash');
-const colors = require('colors');
+Object.defineProperty(exports, "__esModule", { value: true });
+const _ = require("lodash");
+const colors = require("colors");
 colors /* peg this for compile */;
-const fast_stats_1 = require('fast-stats');
-const helpers = require('./helpers');
+const fast_stats_1 = require("fast-stats");
+const helpers = require("./helpers");
 class Statistics {
     constructor(name, selectors) {
         this.people = [];
@@ -148,9 +149,7 @@ String.prototype.replaceAll = function (o, n) {
     return this.split(o).join(n);
 };
 class Selection {
-    constructor() {
-        this.global = [], this.groups = [];
-    }
+    constructor() { this.global = [], this.groups = []; }
 }
 exports.Selection = Selection;
 ;
@@ -165,6 +164,7 @@ class Selector {
     }
 }
 exports.Selector = Selector;
+var Operator;
 (function (Operator) {
     Operator[Operator["GreaterEqual"] = 0] = "GreaterEqual";
     Operator[Operator["LessEqual"] = 1] = "LessEqual";
@@ -172,6 +172,5 @@ exports.Selector = Selector;
     Operator[Operator["Greater"] = 3] = "Greater";
     Operator[Operator["Less"] = 4] = "Less";
     Operator[Operator["Equal"] = 5] = "Equal";
-})(exports.Operator || (exports.Operator = {}));
-var Operator = exports.Operator;
+})(Operator = exports.Operator || (exports.Operator = {}));
 //# sourceMappingURL=bll.js.map

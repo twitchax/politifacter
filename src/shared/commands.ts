@@ -150,7 +150,7 @@ export function downloadAndSavePeople(fileTarget: string) : Promise<Person[]> {
             };
         }).value();
 
-        async.parallel(functions, (err, results) => {
+        async.parallel(functions, (err: Error, results) => {
             if(err) {
                 reject(err);
                 return;
@@ -188,7 +188,7 @@ export function downloadAndSaveStatements(fileTarget: string) : Promise<Statemen
             };
         }).value();
 
-        async.parallel(functions, (err, results) => {
+        async.parallel(functions, (err: Error, results) => {
             if(err) {
                 reject(err);
                 return;
