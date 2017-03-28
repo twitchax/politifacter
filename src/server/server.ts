@@ -1,13 +1,19 @@
 import * as express from 'express';
 import * as fs from 'fs';
+import * as mkdirp from 'mkdirp';
 
 import * as helpers from '../shared/helpers';
 import * as commands from '../shared/commands';
 
 var app = express();
+var cachePath = process.env.CACHE_PATH || '.pfcache';
 var defaultPort = process.env.PORT || 3000;
-var fileName = '.pfcache/people.json';
+var fileName = `${cachePath}/people.json`;
 var updateInterval = 60 * 60 * 1000;
+
+// Create cache folder.
+
+mkdirp.sync(cachePath);
 
 // Global settings.
 

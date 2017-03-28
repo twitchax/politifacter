@@ -1,6 +1,6 @@
 {
   "name": "politifacter",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "A politifact aggregator.",
   "main": "./dist/shared/commands.js",
   "engines": {
@@ -19,6 +19,7 @@
     "fs": "0.0.1-security",
     "fs-extra": "^0.30.0",
     "lodash": "^4.17.4",
+    "mkdirp": "^0.5.1",
     "pkginfo": "^0.4.0",
     "progress": "^1.1.8",
     "request": "^2.81.0"
@@ -34,6 +35,7 @@
     "@types/fs-extra": "^2.0.0",
     "@types/lodash": "^4.14.58",
     "@types/mime": "0.0.29",
+    "@types/mkdirp": "^0.3.29",
     "@types/mocha": "^2.2.40",
     "@types/progress": "^1.1.28",
     "@types/serve-static": "^1.7.31",
@@ -43,7 +45,6 @@
     "typescript": "^2.2.2"
   },
   "scripts": {
-    "postinstall": "tsc",
     "test": "mocha dist/test/test.js -R spec --grep p0",
     "start": "node dist/server/start.js"
   },
