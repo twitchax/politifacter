@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/aaronroney/politifacter.git"
+    "url": "https://github.com/twitchax/politifacter.git"
   },
   "dependencies": {
     "async": "^2.2.0",
@@ -45,7 +45,6 @@
   "scripts": {
     "pretest": "node_modules/.bin/tsc",
     "test": "mocha dist/test/test.js -R spec --grep p0",
-    "prestart": "node_modules/.bin/tsc",
     "start": "node dist/server/start.js"
   },
   "bin": {
