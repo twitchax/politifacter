@@ -7,7 +7,7 @@ import * as commands from '../shared/commands';
 
 var app = express();
 var cachePath = process.env.CACHE_PATH || '.pfcache';
-var defaultPort = process.env.PORT !== undefined ? parseInt(process.env.PORT) : 80;
+var defaultPort = 80;
 var fileName = `${cachePath}/people.json`;
 var updateInterval = 60 * 60 * 1000;
 
