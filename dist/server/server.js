@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const fs = require("fs");
@@ -15,7 +7,7 @@ const helpers = require("../shared/helpers");
 const commands = require("../shared/commands");
 var app = express();
 var cachePath = process.env.CACHE_PATH || '.pfcache';
-var defaultPort = process.env.PORT || 3000;
+var defaultPort = process.env.PORT !== undefined ? parseInt(process.env.PORT) : 3000;
 var fileName = `${cachePath}/people.json`;
 var updateInterval = 60 * 60 * 1000;
 // Create cache folder.
@@ -51,13 +43,13 @@ app.get('/api/analyze/:selectorString/prettytext', (req, res) => {
         res.status(500).send(err);
     });
 });
-app.get('/api/analyze/:selectorString/html', (req, res) => __awaiter(this, void 0, void 0, function* () {
+app.get('/api/analyze/:selectorString/html', async (req, res) => {
     commands.analyze(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.convertString(stats.toPlainString(), helpers.htmlOperators));
     }).catch(err => {
         res.status(500).send(err);
     });
-}));
+});
 app.get('/api/compare/:selectorString/text', (req, res) => {
     commands.compare(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.getPlainStatisticsCompareString(stats));
@@ -72,18 +64,19 @@ app.get('/api/compare/:selectorString/prettytext', (req, res) => {
         res.status(500).send(err);
     });
 });
-app.get('/api/compare/:selectorString/html', (req, res) => __awaiter(this, void 0, void 0, function* () {
+app.get('/api/compare/:selectorString/html', async (req, res) => {
     commands.compare(fileName, req.params.selectorString).then((stats) => {
         res.send(helpers.convertString(helpers.getPlainStatisticsCompareString(stats), helpers.htmlOperators));
     }).catch(err => {
         res.status(500).send(err);
     });
-}));
+});
 app.get('/api/example', (req, res) => {
     commands.example(fileName).then((person) => {
         res.send(person);
     }).catch(err => {
-        res.send(500, err);
+        res.status(500);
+        res.send(err);
     });
 });
 function start(port) {

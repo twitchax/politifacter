@@ -34,7 +34,7 @@ function getStatisticsCompareString(stats) {
     var output = [];
     output.push('\n');
     _(stats).forEach(s => {
-        output.push(`[ ${s.selectors.join(`, `)} ]\n`.bold.underline.bgBlue.green);
+        output.push(`[ ${s.selectors.join(`, `)} ]\n`.underline.bgBlue.green);
         output.push(`${exports.tab}${s.toCompareString()}`);
         output.push('\n\n');
     });

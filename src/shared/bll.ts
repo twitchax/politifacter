@@ -148,7 +148,7 @@ export class Statistics {
         var output = [];
 
         output.push('\n');
-        output.push(`Selectors: [ ${this.selectors.join(', ')} ]\n`.bold.underline.bgBlue.green);
+        output.push(`Selectors: [ ${this.selectors.join(', ')} ]\n`.bgBlue.green.underline);
         output.push('\n');
         output.push(`Number of people in selection: ${this.numPeople} ${this.numPeople < 20 ? ('[ ' + _(this.people).map(p => p.name_slug).value().join(', ') + ' ]').yellow : ''}\n`);
         output.push(`Number of statements in selection: ${this.numTotal}\n`);

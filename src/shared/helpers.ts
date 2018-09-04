@@ -43,7 +43,7 @@ export function getStatisticsCompareString(stats: Statistics[]) : string {
 
     output.push('\n');
     _(stats).forEach(s => {
-        output.push(`[ ${s.selectors.join(`, `)} ]\n`.bold.underline.bgBlue.green)
+        output.push(`[ ${s.selectors.join(`, `)} ]\n`.underline.bgBlue.green)
         output.push(`${tab}${s.toCompareString()}`);
         output.push('\n\n');
     });

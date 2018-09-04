@@ -1,0 +1,19 @@
+sudo: required
+dist: trusty
+language: generic
+
+services:
+ - docker
+ 
+before_install:
+ - sudo apt-get update
+ - sudo apt-get install docker-ce
+
+script:
+ - docker build -t twitchax/politifacter:$TRAVIS_COMMIT .
+
+after_success:
+ - echo "$DOCKER_PASS" | docker login -u $DOCKER_USER --password-stdin
+ - docker push twitchax/politifacter:$TRAVIS_COMMIT
+ - docker tag twitchax/politifacter:$TRAVIS_COMMIT twitchax/politifacter
+ - docker push twitchax/politifacter
